@@ -29,48 +29,60 @@ class Player:
     def __init__(self, playerName):
         self.playerName = playerName
         self.currentScore = 0
-        self.stats = []
+
 
     def addScore(self, points):
         self.currentScore += points
 
     def stats(self):
-        return "{} has a current core of {}".format(self.playerName, self.currentScore)
+        return "{} has a current core of {} \n\n".format(self.playerName, self.currentScore)
 
 class GameState:
+
+
 
     def __init__(self):
         self.p1 = Player('Player 1')
         self.p2 = Player('Player 2')
+        self.scoreKeeper = TurnScoreKeeper()
+        self.totalScore = 0
+
 
     def rollOrHold(self):
         self.input = raw_input('Would you like hold your score or re-roll? Type "h" '
                                'to hold or "r" to re-roll.')
         if self.input == 'h':
-            totalScore = self.p1.addScore(self.updateScore)
-            print "Great, your total score this game is {}".format(totalScore)
+
+            pass
         elif self.input == 'r':
-            print 'Rolling die..........'
+            pass
 
     def gamePlay(self):
 
         while self.p1.currentScore < 100 and self.p2.currentScore < 100:
             for player in (self.p1, self.p2):
+
                 print "It's {}'s turn.".format(player.playerName)
-                scoreKeeper = TurnScoreKeeper()
-                diceValue = Dice()
-                diceValue = diceValue.roll()
+                print 'Rolling die............. \n'
+                while True:
 
-                if diceValue == 1:
-                    print "You have rolled a 1. You score no points this round. Next Player's turn."
-                    scoreKeeper.resetScore()
-                    continue
+                    diceValue = Dice()
+                    diceValue = diceValue.roll()
 
-                scoreKeeper.addTurnScore(diceValue)
-                self.updateScore = scoreKeeper.value
+                    if diceValue == 1:
+                        print "You have rolled a 1. You score no points this round. Next Player's turn. \n"
+                        self.scoreKeeper.resetScore()
+                        break
 
-                print "You rolled a {}. Your total round score is {}".format(diceValue, self.updateScore)
-                self.rollOrHold()
+                    self.scoreKeeper.addTurnScore(diceValue)
+
+                    print "You rolled a {}. Your total round score is {}".format(diceValue, self.scoreKeeper.value)
+                    self.rollOrHold()
+                    if self.input == 'h':
+                        player.addScore(self.scoreKeeper.value)
+                        print player.stats()
+                        self.scoreKeeper.resetScore()
+                        break
 
 
 game = GameState()
