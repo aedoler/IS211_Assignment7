@@ -20,7 +20,7 @@ class TurnScoreKeeper:
     def addTurnScore(self, dieValue):
         self.value += dieValue
 
-    def resectScore(self):
+    def resetScore(self):
         self.value = 0
 
 
@@ -43,18 +43,38 @@ class GameState:
         self.p1 = Player('Player 1')
         self.p2 = Player('Player 2')
 
-    def rollOrHold(self, input):
-        self.input = input
+    def rollOrHold(self):
         self.input = raw_input('Would you like hold your score or re-roll? Type "h" '
                                'to hold or "r" to re-roll.')
         if self.input == 'h':
-            self.p1.addScore()
+            totalScore = self.p1.addScore(self.updateScore)
+            print "Great, your total score this game is {}".format(totalScore)
         elif self.input == 'r':
-            print 'you input r'
+            print 'Rolling die..........'
 
-pg = GameState()
+    def gamePlay(self):
 
-pg.rollOrHold('r')
+        while self.p1.currentScore < 100 and self.p2.currentScore < 100:
+            for player in (self.p1, self.p2):
+                print "It's {}'s turn.".format(player.playerName)
+                scoreKeeper = TurnScoreKeeper()
+                diceValue = Dice()
+                diceValue = diceValue.roll()
+
+                if diceValue == 1:
+                    print "You have rolled a 1. You score no points this round. Next Player's turn."
+                    scoreKeeper.resetScore()
+                    continue
+
+                scoreKeeper.addTurnScore(diceValue)
+                self.updateScore = scoreKeeper.value
+
+                print "You rolled a {}. Your total round score is {}".format(diceValue, self.updateScore)
+                self.rollOrHold()
+
+
+game = GameState()
+game.gamePlay()
 
 
 
