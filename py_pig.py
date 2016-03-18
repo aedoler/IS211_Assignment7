@@ -3,6 +3,7 @@
 """Tests"""
 
 import random
+import sys
 
 class Dice:
 
@@ -34,6 +35,9 @@ class Player:
     def addScore(self, points):
         self.currentScore += points
 
+    def newGameReset(self):
+        self.currentScore = 0
+
     def stats(self):
         return "{} has a current core of {} \n\n".format(self.playerName, self.currentScore)
 
@@ -58,9 +62,9 @@ class GameState:
             pass
 
     def gamePlay(self):
-
         while self.p1.currentScore < 100 and self.p2.currentScore < 100:
             for player in (self.p1, self.p2):
+
 
                 print "It's {}'s turn.".format(player.playerName)
                 print 'Rolling die............. \n'
@@ -84,9 +88,23 @@ class GameState:
                         self.scoreKeeper.resetScore()
                         break
 
+                if player.currentScore >= 100:
+                    print '{} has won this game! \n'.format(player.playerName)
+                    newGame = raw_input('Would you like to start a new game? Type "y" or "n". ')
+                    if newGame == 'y':
+                        self.p1.newGameReset()
+                        self.p2.newGameReset()
+                        continue
+                    else:
+                        print "Bye!"
+                        sys.exit()
 
-game = GameState()
-game.gamePlay()
+
+
+if __name__ == "__main__":
+    game = GameState()
+    game.gamePlay()
+
 
 
 
