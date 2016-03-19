@@ -6,26 +6,32 @@ import random
 import sys
 
 class Dice:
+    """Class simulates dice"""
 
     def __init__(self):
         self.diceValue = random.randint(1, 6)
 
     def roll(self):
+        """Simulates dice roll"""
         return self.diceValue
 
 class TurnScoreKeeper:
+    """Keeps temp round score for player"""
 
     def __init__(self):
         self.value = 0
 
     def addTurnScore(self, dieValue):
+        """Adds score for round to player' total score"""
         self.value += dieValue
 
     def resetScore(self):
+        """Resets round score after each turn"""
         self.value = 0
 
 
 class Player:
+    """Class that simulates a player"""
 
     def __init__(self, playerName):
         self.playerName = playerName
@@ -33,17 +39,19 @@ class Player:
 
 
     def addScore(self, points):
+        """Adds points to player's total score"""
         self.currentScore += points
 
     def newGameReset(self):
+        """Resets players' scores if a new game is started"""
         self.currentScore = 0
 
     def stats(self):
+        """Returns player's name and current score"""
         return "{} has a current core of {} \n\n".format(self.playerName, self.currentScore)
 
 class GameState:
-
-
+    """Class simulates gameplay"""
 
     def __init__(self):
         self.p1 = Player('Player 1')
@@ -53,6 +61,7 @@ class GameState:
 
 
     def rollOrHold(self):
+        """Returns option to either hold score or re-roll"""
         self.input = raw_input('Would you like hold your score or re-roll? Type "h" '
                                'to hold or "r" to re-roll.')
         if self.input == 'h':
@@ -62,6 +71,7 @@ class GameState:
             pass
 
     def gamePlay(self):
+        """Gameplay"""
         while self.p1.currentScore < 100 and self.p2.currentScore < 100:
             for player in (self.p1, self.p2):
 
